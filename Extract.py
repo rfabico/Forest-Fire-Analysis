@@ -156,18 +156,26 @@ def obtain_rain(data, year, month, labels=['Prec_pre_30','Prec_pre_15','Prec_pre
     :param labels: recorded rain at either 30, 15, 7 or day of contingency
     :return: numpy array
     """
-    yearmonth = ['disc_pre_year', 'discovery_month']
-    rain = data[(data['disc_pre_year'] == year) & (data['discovery_month'] == month)]
+    yearmonth = ["disc_pre_year", "discovery_month"]
+    rain = data[(data["disc_pre_year"] == year) & (data["discovery_month"] == month)]
     labels = yearmonth + labels
     rain = rain[labels]
-    rain = rain.to_numpy()
+    rain = remove_invalids(rain.to_numpy())
     return rain
 
+def remove_invalids(data):
+    """
+    Removes all invalid entries from data
+    :param data: numpy ndarray containing entires
+    :return: dataset with invalid entries removed
+    """
+    return data[np.all(data != -1, axis=1)]
 
 def main(forest_path):
     data = load_dataset(forest_path)
     state = obtain_rain(data,2015,'Nov')
-    print(state)
+    rain = obtain_rain(data, 2014, "Jan")
+    print(rain)
 
 if __name__ == '__main__':
     # can use the online path or do local path
