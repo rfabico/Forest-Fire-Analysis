@@ -170,7 +170,12 @@ def remove_invalids(data):
     :param data: numpy ndarray containing entries
     :return: dataset with invalid entries removed
     """
-    return data[np.all(data != 1, axis=1)]
+    clean = data[data.weather_file != 'File Not Found']
+    return clean
+
+def classify_tag(data):
+    data['natural'] = np.where(data['stat_cause_descr'] != 'Lightning',0,1)
+    return data
 
 
 def main(forest_path):
