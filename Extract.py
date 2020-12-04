@@ -84,6 +84,11 @@ def obtain_state(data):
     state = np.hstack((X,Y))
     return state
 
+def obtain_monthly_state(data,state,year,month):
+    result = data[(data['state'] == state)]
+    result = result[(result['disc_pre_year'] == year) & (result['discovery_month'] == month)]
+    return result
+
 def obtain_cause(data, year, month):
     """
     Obtains the total causes of the month
@@ -176,14 +181,3 @@ def remove_invalids(data):
 def classify_tag(data):
     data['natural'] = np.where(data['stat_cause_descr'] != 'Lightning',0,1)
     return data
-
-
-def main(forest_path):
-     data = load_dataset(forest_path)
-     state = obtain_month_year(data)
-     print(state)
-
-if __name__ == '__main__':
-     # can use the online path or do local path
-     main(forest_path='https://raw.githubusercontent.com/rfabico/Forest-Fire-Analysis/main/FW_Veg_Rem_Combined.csv')
-     # neural networks
