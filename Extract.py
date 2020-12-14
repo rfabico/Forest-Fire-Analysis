@@ -84,10 +84,12 @@ def obtain_state(data):
     state = np.hstack((X,Y))
     return state
 
+
 def obtain_monthly_state(data,state,year,month):
     result = data[(data['state'] == state)]
     result = result[(result['disc_pre_year'] == year) & (result['discovery_month'] == month)]
     return result
+
 
 def obtain_cause(data, year, month):
     """
@@ -181,3 +183,6 @@ def remove_invalids(data):
 def classify_tag(data):
     data['natural'] = np.where(data['stat_cause_descr'] != 'Lightning',0,1)
     return data
+    return data[np.all(data != 1, axis=1)]
+
+
