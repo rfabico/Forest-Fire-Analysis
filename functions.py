@@ -11,61 +11,6 @@ from sklearn.pipeline import make_pipeline
 from matplotlib.colors import ListedColormap
 from sklearn.model_selection import train_test_split
 
-# What we didn't use
-def graph_total_cause(data):
-    """
-    Graph to show use the total causes of
-    :param data:
-    :return:
-    """
-    data = ex.obtain_total_cause(data)
-    x = data[:,0]
-    y = data[:,1]
-    y = y.astype(int)
-    plt.xticks(rotation=90)
-    plt.bar(x,y)
-    plt.savefig('total_causes.png')
-    plt.show()
-
-
-def lat_log(data):
-    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    fire_class = ['B','C','D','E','F','G']
-    data = ex.classify_tag(data)
-    data = data.replace(fire_class,[1,2,3,4,5,6])
-    x = data[['latitude','longitude']].to_numpy()
-    y = data['natural'].to_numpy()
-
-    model = KNeighborsClassifier(3)
-    h = 0.02
-    ax = plt.subplot()
-    x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
-    y_min, y_max = x[:, 1].min(), x[:, 1].max()
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                         np.arange(y_min, y_max, h))
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4)
-    model.fit(x_train, y_train)
-    score = model.score(x_test, y_test)
-    if hasattr(model, "decision_function"):
-        Z = model.decision_function(np.c_[xx.ravel(), yy.ravel()])
-    else:
-        Z = model.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
-    Z = Z.reshape(xx.shape)
-    cm = plt.cm.RdBu
-    cm_bright = ListedColormap(['#FF0000', '#0000FF'])
-    ax.contourf(xx, yy, Z, cmap=cm, alpha=.8)
-
-    # Plot the training points
-    ax.scatter(x_train[:, 0], x_train[:, 1], c=y_train, cmap=cm_bright,
-               edgecolors='k')
-    ax.set_xlim(xx.min(), xx.max())
-    ax.set_ylim(yy.min(), yy.max())
-    ax.set_xticks(())
-    ax.set_yticks(())
-    ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
-            size=15, horizontalalignment='right')
-    plt.show()
-
 
 # what we improved on
 def linear_every_month(data):
@@ -280,3 +225,60 @@ def last_twelve(data):
     plt.plot(temp, y_poly_pred, color='red')
     plt.title("Regression of fires every month each year - prediction of last 12")
     plt.show()
+    
+    
+# What we didn't use - scratched or did not fit what we needed
+def graph_total_cause(data):
+    """
+    Graph to show use the total causes of
+    :param data:
+    :return:
+    """
+    data = ex.obtain_total_cause(data)
+    x = data[:,0]
+    y = data[:,1]
+    y = y.astype(int)
+    plt.xticks(rotation=90)
+    plt.bar(x,y)
+    plt.savefig('total_causes.png')
+    plt.show()
+
+
+def lat_log(data):
+    months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    fire_class = ['B','C','D','E','F','G']
+    data = ex.classify_tag(data)
+    data = data.replace(fire_class,[1,2,3,4,5,6])
+    x = data[['latitude','longitude']].to_numpy()
+    y = data['natural'].to_numpy()
+
+    model = KNeighborsClassifier(3)
+    h = 0.02
+    ax = plt.subplot()
+    x_min, x_max = x[:, 0].min() - 1, x[:, 0].max() + 1
+    y_min, y_max = x[:, 1].min(), x[:, 1].max()
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.4)
+    model.fit(x_train, y_train)
+    score = model.score(x_test, y_test)
+    if hasattr(model, "decision_function"):
+        Z = model.decision_function(np.c_[xx.ravel(), yy.ravel()])
+    else:
+        Z = model.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
+    Z = Z.reshape(xx.shape)
+    cm = plt.cm.RdBu
+    cm_bright = ListedColormap(['#FF0000', '#0000FF'])
+    ax.contourf(xx, yy, Z, cmap=cm, alpha=.8)
+
+    # Plot the training points
+    ax.scatter(x_train[:, 0], x_train[:, 1], c=y_train, cmap=cm_bright,
+               edgecolors='k')
+    ax.set_xlim(xx.min(), xx.max())
+    ax.set_ylim(yy.min(), yy.max())
+    ax.set_xticks(())
+    ax.set_yticks(())
+    ax.text(xx.max() - .3, yy.min() + .3, ('%.2f' % score).lstrip('0'),
+            size=15, horizontalalignment='right')
+    plt.show()
+
