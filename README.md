@@ -18,3 +18,6 @@ pip install pandas
 pip install -u scikit-learn
 pip install seaborn
 ```
+
+# Running the project
+Use the defined functions given in functions.py inside Model.py in order to replicate results we had during the creation of the project
