@@ -16,7 +16,9 @@ import glob
 
 def main(forest_path):
     data = ex.load_dataset(forest_path)
-    show = fs.year_pred_poly(data)
+    # uncomment if you do not have the firestate folder
+    # fs.save_csv(data)
+    
 
 if __name__ == '__main__':
     main(forest_path='https://raw.githubusercontent.com/rfabico/Forest-Fire-Analysis/main/FW_Veg_Rem_Combined.csv')
