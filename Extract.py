@@ -16,7 +16,6 @@ def load_dataset(csv_path):
     #                       'putout_time','disc_date_pre','disc_pre_month','wstation_usaf','dstation_m','wstation_wban',
     #                       'wstation_byear','wstation_eyear','fire_mag']
     #data = data.drop(headers, axis=1)
-    # load whatever data required
     return data
 
 def obtain_total_month(data):
@@ -86,11 +85,24 @@ def obtain_state(data):
 
 
 def obtain_monthly_state(data,state,year,month):
+    """
+    Obtain the total amount of fires in each state by year and month
+    :param data: open csv file
+    :state: str, state
+    :year: int, year (1991-1992)
+    :month: int, month (0-12)
+    """
     result = data[(data['state'] == state)]
     result = result[(result['disc_pre_year'] == year) & (result['discovery_month'] == month)]
     return result
 
 
+
+
+# The following functions below were not used in the final project
+# These functions were used in hopes of our original model but realized that with
+# the current data set it was not ideal as it does not contain certain features
+# we require
 def obtain_cause(data, year, month):
     """
     Obtains the total causes of the month
